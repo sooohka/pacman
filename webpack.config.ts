@@ -32,6 +32,13 @@ const config: DevServerConfig & Configuration = {
         test: /\.css$/,
         use: ["style-loader", "css-loader"],
       },
+      {
+        test: /\.(png|jpg)$/,
+        type: "asset/resource",
+        generator:{
+          filename:'static/[hash][ext][query]'
+        }
+      },
     ],
   },
   resolve: {
