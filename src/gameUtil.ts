@@ -1,35 +1,40 @@
 import Cell from "./cell";
 import { CELL, CELL_IMAGES, CellKey } from "./constant";
+import Ghost from "./ghost";
 import Player from "./player";
 
-function isColliding(cell: Cell, player: Player) {
+function isColliding(cell: Cell, target: Player | Ghost) {
   const [bL, bR] = [cell.position.x, cell.position.x + cell.width];
   const [bU, bD] = [cell.position.y, cell.position.y + cell.height];
-  const [pL, pR] = [
-    player.position.x - player.radius + player.velocity.x,
-    player.position.x + player.radius + player.velocity.x,
-  ];
-  const [pU, pD] = [
-    player.position.y - player.radius + player.velocity.y,
-    player.position.y + player.radius + player.velocity.y,
-  ];
-  if (pL < bR && pU < bD && pR > bL && pD > bU) return true;
+  let tL;
+  let tR;
+  let tU;
+  let tD;
+
+  if (target instanceof Ghost) {
+    tL = target.position.x + target.velocity.x;
+    tR = target.position.x + target.width + target.velocity.x;
+    tU = target.position.y + target.velocity.y;
+    tD = target.position.y + target.height + target.velocity.y;
+  } else {
+    tL = target.position.x - target.radius + target.velocity.x;
+    tR = target.position.x + target.radius + target.velocity.x;
+    tU = target.position.y - target.radius + target.velocity.y;
+    tD = target.position.y + target.radius + target.velocity.y;
+  }
+  if (tL < bR && tU < bD && tR > bL && tD > bU) return true;
   return false;
 }
 
 // TODO:다시구현
 function isTouching(cell: Cell, player: Player) {
-  const [bL, bR] = [cell.position.x, cell.position.x + cell.width];
-  const [bU, bD] = [cell.position.y, cell.position.y + cell.height];
-  const [pL, pR] = [
-    player.position.x - player.radius + player.velocity.x,
-    player.position.x + player.radius + player.velocity.x,
+  const [cx, cy] = [
+    cell.position.x + cell.width / 2,
+    cell.position.y + cell.height / 2,
   ];
-  const [pU, pD] = [
-    player.position.y - player.radius + player.velocity.y,
-    player.position.y + player.radius + player.velocity.y,
-  ];
-  if (pL < bR && pU < bD && pR > bL && pD > bU) return true;
+  const [px, py] = [player.position.x, player.position.y];
+
+  if (Math.abs(px - cx) < 5 && Math.abs(py - cy) < 5) return true;
   return false;
 }
 
@@ -58,6 +63,33 @@ function checkNextMove(
   }
 }
 
+function checkGhostNextMove(
+  ghost: Ghost,
+  cells: Cell[],
+  nextMove: Ghost["velocity"]
+) {
+  for (const cell of cells) {
+    const moGhost = {
+      ...ghost,
+      velocity: nextMove,
+    } as Ghost;
+    if (cell.isBoundary && isColliding(cell, moGhost)) {
+      console.log("hi");
+
+      ghost.setVelocity({
+        x: nextMove.x === 0 ? undefined : 0,
+        y: nextMove.y === 0 ? undefined : 0,
+      });
+      break;
+    } else {
+      ghost.setVelocity({
+        x: nextMove.x === 0 ? undefined : nextMove.x,
+        y: nextMove.y === 0 ? undefined : nextMove.y,
+      });
+    }
+  }
+}
+
 function setMap(map: CellKey[][]) {
   const cells: Cell[] = [];
   map.forEach((row, i) => {
@@ -73,9 +105,12 @@ function setMap(map: CellKey[][]) {
   return cells;
 }
 
-function drawMap(_map: CellKey[][], player: Player) {
+function drawMap(_map: CellKey[][], player: Player, ghosts: Ghost[]) {
   setMap(_map).forEach((cell) => {
     cell.draw();
+  });
+  ghosts.forEach((ghost) => {
+    ghost.draw();
   });
   player.draw();
 }
@@ -105,7 +140,20 @@ function countCoins(map: CellKey[][]) {
   return count;
 }
 
+function generateGhostNextMove() {
+  const val = [
+    "left" as const,
+    "right" as const,
+    "up" as const,
+    "down" as const,
+  ];
+  const ran = Math.floor(Math.random() * 4);
+  return val[ran];
+}
+
 export {
+  checkGhostNextMove,
+  generateGhostNextMove,
   cellsToMap,
   countCoins,
   isTouching,

@@ -15,25 +15,50 @@ import pipeConnectorRight from "./assets/pipeConnectorRight.png";
 import pipeConnectorTop from "./assets/pipeConnectorTop.png";
 import pipecross from "./assets/pipecross.png";
 import coin from "./assets/Coin.png";
+import redGhost from "./assets/redGhost.png";
+import yellowGhost from "./assets/yellowGhost.png";
+import blueGhost from "./assets/blueGhost.png";
+import orangeGhost from "./assets/orangeGhost.png";
+import greenGhost from "./assets/greenGhost.png";
+
+type CellKey = keyof typeof CELL_IMAGE_SRC;
+
+type GhostKey = keyof typeof GHOST_IMAGE_SRC;
+const scoreEl = document.querySelector("#score");
 
 const MAP = {
   WIDTH: 11,
   HEIGHT: 13,
 };
 
-const CANVAS = {
-  WIDTH: window.innerWidth,
-  HEIGHT: window.innerHeight,
-};
-
 const CELL = {
   WIDTH: 40,
   HEIGHT: 40,
+  IMAGE_SIZE: 16,
+};
+
+const CANVAS = {
+  WIDTH: MAP.WIDTH * CELL.WIDTH,
+  HEIGHT: MAP.HEIGHT * CELL.HEIGHT,
+};
+const GHOST = {
+  WIDTH: 40,
+  HEIGHT: 40,
+  IMAGE_SIZE: 16,
+  SPEED: 3,
 };
 
 const PLAYER = {
-  RADIUS: 15,
+  RADIUS: 20,
   SPEED: 5,
+};
+
+const GHOST_IMAGE_SRC = {
+  red: redGhost,
+  orange: orangeGhost,
+  yellow: yellowGhost,
+  green: greenGhost,
+  blue: blueGhost,
 };
 
 const CELL_IMAGE_SRC = {
@@ -57,11 +82,25 @@ const CELL_IMAGE_SRC = {
   "0": null as null,
 };
 
+function createGhostImage(src: GhostKey) {
+  const image = new Image();
+  image.src = GHOST_IMAGE_SRC[src];
+  return image;
+}
+
 function createCellImage(src: CellKey) {
   const image = new Image();
   image.src = CELL_IMAGE_SRC[src];
   return image;
 }
+
+const GHOST_IMAGES: typeof GHOST_IMAGE_SRC = {
+  red: createGhostImage("red"),
+  orange: createGhostImage("orange"),
+  yellow: createGhostImage("yellow"),
+  green: createGhostImage("green"),
+  blue: createGhostImage("blue"),
+};
 
 const CELL_IMAGES: typeof CELL_IMAGE_SRC = {
   "⌜": createCellImage("⌜"),
@@ -84,7 +123,18 @@ const CELL_IMAGES: typeof CELL_IMAGE_SRC = {
   "0": null,
 };
 
-type CellKey = keyof typeof CELL_IMAGE_SRC;
-
-export { MAP, CELL, PLAYER, CANVAS, CellKey, CELL_IMAGE_SRC, CELL_IMAGES };
+export {
+  scoreEl,
+  MAP,
+  CELL,
+  GHOST,
+  PLAYER,
+  CANVAS,
+  CellKey,
+  GhostKey,
+  GHOST_IMAGE_SRC,
+  CELL_IMAGE_SRC,
+  GHOST_IMAGES,
+  CELL_IMAGES,
+};
 export default null;

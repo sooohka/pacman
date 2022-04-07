@@ -1,5 +1,5 @@
 import C from "./canvas";
-import { PLAYER } from "./constant";
+import { PLAYER, scoreEl } from "./constant";
 
 type PlayerProps = {
   position: { x: number; y: number };
@@ -41,6 +41,7 @@ class Player {
   }
   eat() {
     this.point += 1;
+    scoreEl.textContent = (this.point * 100).toString();
     console.log(this.point);
   }
 }

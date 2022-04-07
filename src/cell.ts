@@ -46,12 +46,12 @@ class Cell {
         this.image,
         0,
         0,
-        16,
-        16,
+        CELL.IMAGE_SIZE,
+        CELL.IMAGE_SIZE,
         this.position.x,
         this.position.y,
-        40,
-        40
+        CELL.WIDTH,
+        CELL.HEIGHT
       );
       return;
     }
