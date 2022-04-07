@@ -5,18 +5,21 @@ type PlayerProps = {
   position: { x: number; y: number };
   velocity?: { x: number; y: number };
   radius?: number;
+  point?: number;
 };
 
 class Player {
   position: PlayerProps["position"];
   velocity: PlayerProps["velocity"];
   radius: PlayerProps["radius"];
+  point: PlayerProps["point"];
 
   constructor(props: PlayerProps) {
     const { position, radius, velocity } = props;
     this.position = position;
     this.radius = radius || PLAYER.RADIUS;
     this.velocity = velocity || { x: 0, y: 0 };
+    this.point = 0;
   }
 
   setVelocity(velocity: Partial<PlayerProps["velocity"]>) {
@@ -35,6 +38,10 @@ class Player {
   move() {
     this.position.x += this.velocity.x;
     this.position.y += this.velocity.y;
+  }
+  eat() {
+    this.point += 1;
+    console.log(this.point);
   }
 }
 

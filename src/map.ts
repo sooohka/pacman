@@ -1,8 +1,7 @@
-import { getBoundaries } from "./boundary";
-import { MapImages } from "./constant";
-import Player from "./player";
+import Cell from "./cell";
+import { CellKey } from "./constant";
 
-const map1: MapImages[][] = [
+const map1: CellKey[][] = [
   ["⌜", "-", "-", "-", "-", "-", "-", "-", "-", "-", "⌝"],
   ["|", "1", "1", "1", "1", "1", "1", "1", "1", "1", "|"],
   ["|", "1", "ㅁ", "1", "<", "b", ">", "1", "ㅁ", "1", "|"],
@@ -18,16 +17,11 @@ const map1: MapImages[][] = [
   ["⌞", "-", "-", "-", "-", "-", "-", "-", "-", "-", "⌟"],
 ];
 
+const map2: CellKey[][] = [["1"]];
+
 const map = {
   1: map1,
+  2: map2,
 };
 
-function drawMap(_map: MapImages[][], player: Player) {
-  getBoundaries(_map).forEach((boundary) => {
-    boundary.draw();
-  });
-  player.draw();
-}
-
-export { drawMap };
 export default map;

@@ -541,39 +541,39 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.getBoundaries = void 0;
+exports.setMap = void 0;
 var canvas_1 = __importDefault(__webpack_require__(/*! ./canvas */ "./src/canvas.ts"));
 var constant_1 = __webpack_require__(/*! ./constant */ "./src/constant.ts");
-var Boundary = /** @class */ (function () {
-    function Boundary(props) {
+var Cell = /** @class */ (function () {
+    function Cell(props) {
         var position = props.position, width = props.width, height = props.height;
         this.position = position;
-        this.width = width || constant_1.BOUNDARY.WIDTH;
-        this.height = height || constant_1.BOUNDARY.HEIGHT;
+        this.width = width || constant_1.CELL.WIDTH;
+        this.height = height || constant_1.CELL.HEIGHT;
     }
-    Boundary.prototype.draw = function () {
+    Cell.prototype.draw = function () {
         canvas_1.default.fillStyle = "blue";
         canvas_1.default.fillRect(this.position.x, this.position.y, this.width, this.height);
     };
-    return Boundary;
+    return Cell;
 }());
-function getBoundaries(map) {
+function setMap(map) {
     var boundaries = [];
     map.forEach(function (row, i) {
         row.forEach(function (cell, j) {
             if (cell !== 1)
                 return;
             var position = {
-                y: constant_1.BOUNDARY.HEIGHT * i,
-                x: constant_1.BOUNDARY.WIDTH * j,
+                y: constant_1.CELL.HEIGHT * i,
+                x: constant_1.CELL.WIDTH * j,
             };
-            boundaries.push(new Boundary({ position: position }));
+            boundaries.push(new Cell({ position: position }));
         });
     });
     return boundaries;
 }
-exports.getBoundaries = getBoundaries;
-exports["default"] = Boundary;
+exports.setMap = setMap;
+exports["default"] = Cell;
 
 
 /***/ }),
@@ -607,17 +607,17 @@ exports["default"] = C;
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.CANVAS = exports.PLAYER = exports.BOUNDARY = void 0;
+exports.CANVAS = exports.PLAYER = exports.CELL = void 0;
 var CANVAS = {
     WIDTH: window.innerWidth,
     HEIGHT: window.innerHeight,
 };
 exports.CANVAS = CANVAS;
-var BOUNDARY = {
+var CELL = {
     WIDTH: 50,
     HEIGHT: 50,
 };
-exports.BOUNDARY = BOUNDARY;
+exports.CELL = CELL;
 var PLAYER = {
     RADIUS: 20,
     SPEED: 5,
@@ -734,13 +734,13 @@ var block_png_1 = __importDefault(__webpack_require__(/*! ./assets/block.png */ 
 console.log(block_png_1.default);
 var player = new player_1.default({
     position: {
-        x: constant_1.BOUNDARY.WIDTH + constant_1.BOUNDARY.WIDTH / 2,
-        y: constant_1.BOUNDARY.HEIGHT + constant_1.BOUNDARY.HEIGHT / 2,
+        x: constant_1.CELL.WIDTH + constant_1.CELL.WIDTH / 2,
+        y: constant_1.CELL.HEIGHT + constant_1.CELL.HEIGHT / 2,
     },
 });
 function animate() {
     requestAnimationFrame(animate);
-    var boundaries = (0, boundary_1.getBoundaries)(map_1.default[1]);
+    var boundaries = (0, boundary_1.setMap)(map_1.default[1]);
     canvas_1.default.clearRect(0, 0, window.innerWidth, window.outerHeight);
     if (key_1.default.left.pressed) {
         (0, gameUtil_1.checkNextMove)(player, boundaries, { x: -constant_1.PLAYER.SPEED, y: 0 });
@@ -848,7 +848,7 @@ var map = {
     1: map1,
 };
 function drawMap(_map, player) {
-    (0, boundary_1.getBoundaries)(_map).forEach(function (boundary) {
+    (0, boundary_1.setMap)(_map).forEach(function (boundary) {
         boundary.draw();
     });
     player.draw();

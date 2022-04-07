@@ -14,13 +14,19 @@ import pipeConnectorLeft from "./assets/pipeConnectorLeft.png";
 import pipeConnectorRight from "./assets/pipeConnectorRight.png";
 import pipeConnectorTop from "./assets/pipeConnectorTop.png";
 import pipecross from "./assets/pipecross.png";
+import coin from "./assets/Coin.png";
+
+const MAP = {
+  WIDTH: 11,
+  HEIGHT: 13,
+};
 
 const CANVAS = {
   WIDTH: window.innerWidth,
   HEIGHT: window.innerHeight,
 };
 
-const BOUNDARY = {
+const CELL = {
   WIDTH: 40,
   HEIGHT: 40,
 };
@@ -30,7 +36,7 @@ const PLAYER = {
   SPEED: 5,
 };
 
-const MAPIMAGES = {
+const CELL_IMAGE_SRC = {
   "⌜": pipeCorner1,
   "⌝": pipeCorner2,
   "⌟": pipeCorner3,
@@ -47,9 +53,38 @@ const MAPIMAGES = {
   l: pipeConnectorLeft,
   r: pipeConnectorRight,
   c: pipecross,
-  "1": "",
+  "1": coin,
+  "0": null as null,
 };
-type MapImages = keyof typeof MAPIMAGES;
 
-export { BOUNDARY, PLAYER, CANVAS, MAPIMAGES, MapImages };
+function createCellImage(src: CellKey) {
+  const image = new Image();
+  image.src = CELL_IMAGE_SRC[src];
+  return image;
+}
+
+const CELL_IMAGES: typeof CELL_IMAGE_SRC = {
+  "⌜": createCellImage("⌜"),
+  "⌝": createCellImage("⌝"),
+  "⌟": createCellImage("⌟"),
+  "⌞": createCellImage("⌞"),
+  "-": createCellImage("-"),
+  "|": createCellImage("|"),
+  ㅁ: createCellImage("ㅁ"),
+  "<": createCellImage("<"),
+  ">": createCellImage(">"),
+  "^": createCellImage("^"),
+  v: createCellImage("v"),
+  b: createCellImage("b"),
+  t: createCellImage("t"),
+  l: createCellImage("l"),
+  r: createCellImage("r"),
+  c: createCellImage("c"),
+  "1": createCellImage("1"),
+  "0": null,
+};
+
+type CellKey = keyof typeof CELL_IMAGE_SRC;
+
+export { MAP, CELL, PLAYER, CANVAS, CellKey, CELL_IMAGE_SRC, CELL_IMAGES };
 export default null;
