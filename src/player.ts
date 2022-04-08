@@ -6,6 +6,7 @@ type PlayerProps = {
   velocity?: { x: number; y: number };
   radius?: number;
   point?: number;
+  direction?: Dir;
 };
 
 class Player {
@@ -13,6 +14,7 @@ class Player {
   velocity: PlayerProps["velocity"];
   radius: PlayerProps["radius"];
   point: PlayerProps["point"];
+  direction: PlayerProps["direction"];
 
   constructor(props: PlayerProps) {
     const { position, radius, velocity } = props;
@@ -20,9 +22,25 @@ class Player {
     this.radius = radius || PLAYER.RADIUS;
     this.velocity = velocity || { x: 0, y: 0 };
     this.point = 0;
+    this.direction = "stop";
   }
 
-  setVelocity(velocity: Partial<PlayerProps["velocity"]>) {
+  setDirection(key: PlayerProps["direction"]) {
+    this.direction = key;
+    if (this.direction === "left") {
+      this.setVelocity({ x: -PLAYER.SPEED, y: 0 });
+    } else if (this.direction === "right") {
+      this.setVelocity({ x: PLAYER.SPEED, y: 0 });
+    } else if (this.direction === "up") {
+      this.setVelocity({ x: 0, y: -PLAYER.SPEED });
+    } else if (this.direction === "down") {
+      this.setVelocity({ x: 0, y: PLAYER.SPEED });
+    } else if (this.direction === "stop") {
+      this.setVelocity({ x: 0, y: 0 });
+    }
+  }
+
+  private setVelocity(velocity: Partial<PlayerProps["velocity"]>) {
     if (velocity.x !== undefined) this.velocity.x = velocity.x;
     if (velocity.y !== undefined) this.velocity.y = velocity.y;
   }

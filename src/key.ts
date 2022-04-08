@@ -1,26 +1,24 @@
-const keys = {
-  left: {
-    pressed: false,
-  },
-  right: {
-    pressed: false,
-  },
-  up: {
-    pressed: false,
-  },
-  down: {
-    pressed: false,
-  },
-};
+type ArrowKey = Exclude<Dir, "stop">;
+class Keys {
+  isPressed: { [key in ArrowKey]: boolean };
+  static instance: Keys = null;
 
-type Dir = "left" | "right" | "up" | "down";
-function pressKey(dir: Dir) {
-  Object.keys(keys).forEach((key) => {
-    if (key === dir) keys[key].pressed = true;
-    else keys[key as Dir].pressed = false;
-  });
+  constructor() {
+    if (Keys.instance !== null) {
+      // eslint-disable-next-line no-constructor-return
+      return Keys.instance;
+    }
+
+    this.isPressed = { left: false, right: false, up: false, down: false };
+    Keys.instance = this;
+  }
+  getIsPressed(key: ArrowKey) {
+    return this.isPressed[key];
+  }
+
+  pressKey(key: ArrowKey) {
+    this.isPressed = { left: false, right: false, up: false, down: false };
+    this.isPressed[key] = true;
+  }
 }
-
-export { pressKey };
-
-export default keys;
+export default Keys;

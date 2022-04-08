@@ -123,18 +123,5 @@ const CELL_IMAGES: typeof CELL_IMAGE_SRC = {
   "0": null,
 };
 
-export {
-  scoreEl,
-  MAP,
-  CELL,
-  GHOST,
-  PLAYER,
-  CANVAS,
-  CellKey,
-  GhostKey,
-  GHOST_IMAGE_SRC,
-  CELL_IMAGE_SRC,
-  GHOST_IMAGES,
-  CELL_IMAGES,
-};
+export { scoreEl, MAP, CELL, GHOST, PLAYER, CANVAS, CellKey, GhostKey, GHOST_IMAGE_SRC, CELL_IMAGE_SRC, GHOST_IMAGES, CELL_IMAGES };
 export default null;
