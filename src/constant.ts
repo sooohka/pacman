@@ -20,6 +20,7 @@ import yellowGhost from "./assets/yellowGhost.png";
 import blueGhost from "./assets/blueGhost.png";
 import orangeGhost from "./assets/orangeGhost.png";
 import greenGhost from "./assets/greenGhost.png";
+import pacman from "./assets/PacMan.png";
 
 type CellKey = keyof typeof CELL_IMAGE_SRC;
 
@@ -46,11 +47,6 @@ const GHOST = {
   HEIGHT: 40,
   IMAGE_SIZE: 16,
   SPEED: 3,
-};
-
-const PLAYER = {
-  RADIUS: 20,
-  SPEED: 5,
 };
 
 const GHOST_IMAGE_SRC = {
@@ -81,6 +77,12 @@ const CELL_IMAGE_SRC = {
   "1": coin,
   "0": null as null,
 };
+
+function createPlayerImage() {
+  const image = new Image();
+  image.src = pacman;
+  return image;
+}
 
 function createGhostImage(src: GhostKey) {
   const image = new Image();
@@ -122,6 +124,26 @@ const CELL_IMAGES: typeof CELL_IMAGE_SRC = {
   "1": createCellImage("1"),
   "0": null,
 };
+const PLAYER = {
+  WIDTH: 40,
+  HEIGHT: 40,
+  SPEED: 5,
+  IMAGE_SIZE: 16,
+  IMAGE: createPlayerImage(),
+};
 
-export { scoreEl, MAP, CELL, GHOST, PLAYER, CANVAS, CellKey, GhostKey, GHOST_IMAGE_SRC, CELL_IMAGE_SRC, GHOST_IMAGES, CELL_IMAGES };
+export {
+  scoreEl,
+  MAP,
+  CELL,
+  GHOST,
+  PLAYER,
+  CANVAS,
+  CellKey,
+  GhostKey,
+  GHOST_IMAGE_SRC,
+  CELL_IMAGE_SRC,
+  GHOST_IMAGES,
+  CELL_IMAGES,
+};
 export default null;

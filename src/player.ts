@@ -1,5 +1,6 @@
 import C from "./canvas";
 import { PLAYER, scoreEl } from "./constant";
+import Keys from "./key";
 
 type PlayerProps = {
   position: { x: number; y: number };
@@ -7,22 +8,34 @@ type PlayerProps = {
   radius?: number;
   point?: number;
   direction?: Dir;
+  image?: HTMLImageElement;
+  width?: number;
+  height?: number;
 };
+function RadToDag(angle: number) {
+  return (angle * Math.PI) / 180;
+}
 
 class Player {
   position: PlayerProps["position"];
   velocity: PlayerProps["velocity"];
-  radius: PlayerProps["radius"];
   point: PlayerProps["point"];
   direction: PlayerProps["direction"];
+  image: PlayerProps["image"];
+  width: PlayerProps["width"];
+  height: PlayerProps["height"];
+  cycle: number;
 
   constructor(props: PlayerProps) {
-    const { position, radius, velocity } = props;
+    const { image, position, velocity, width, height } = props;
     this.position = position;
-    this.radius = radius || PLAYER.RADIUS;
     this.velocity = velocity || { x: 0, y: 0 };
     this.point = 0;
     this.direction = "stop";
+    this.image = image;
+    this.width = width || PLAYER.WIDTH;
+    this.height = height || PLAYER.HEIGHT;
+    this.cycle = 0;
   }
 
   setDirection(key: PlayerProps["direction"]) {
@@ -46,11 +59,33 @@ class Player {
   }
 
   draw() {
-    C.beginPath();
-    C.arc(this.position.x, this.position.y, this.radius, 0, Math.PI * 2);
-    C.fillStyle = "yellow";
-    C.fill();
-    C.closePath();
+    C.save();
+    C.translate(this.position.x + 20, this.position.y + 20);
+    const keys = new Keys();
+    if (keys.getIsPressed("right")) {
+      C.rotate(RadToDag(0));
+    } else if (keys.getIsPressed("down")) {
+      C.rotate(RadToDag(90));
+    } else if (keys.getIsPressed("left")) {
+      C.scale(-1, 1);
+    } else if (keys.getIsPressed("up")) {
+      C.rotate(RadToDag(270));
+    }
+    C.translate(-(this.position.x + 20), -(this.position.y + 20));
+    C.drawImage(
+      this.image,
+      PLAYER.IMAGE_SIZE * this.cycle,
+      0,
+      PLAYER.IMAGE_SIZE,
+      PLAYER.IMAGE_SIZE,
+      this.position.x,
+      this.position.y,
+      this.width,
+      this.height
+    );
+    C.restore();
+    if (this.cycle > 6) this.cycle = 0;
+    else this.cycle += 1;
   }
 
   move() {
@@ -60,7 +95,6 @@ class Player {
   eat() {
     this.point += 1;
     scoreEl.textContent = (this.point * 100).toString();
-    console.log(this.point);
   }
 }
 

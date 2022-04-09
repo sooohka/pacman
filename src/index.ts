@@ -1,6 +1,6 @@
 import C from "./canvas";
 import Cell from "./cell";
-import { CANVAS, CELL, GHOST_IMAGES } from "./constant";
+import { CANVAS, CELL, GHOST_IMAGES, PLAYER } from "./constant";
 import {
   checkCells,
   checkEnd,
@@ -18,13 +18,14 @@ import Player from "./player";
 import "./styles/style.css";
 
 function animate(cells: Cell[], player: Player, ghosts: Ghost[], totalCoin: number) {
+  const frameId = requestAnimationFrame(animate.bind(this, cells, player, ghosts, totalCoin));
   for (const ghost of ghosts) {
     if (isColliding(player, ghost)) {
-      alert("collides");
-      return;
+      alert("고스트와 충돌 😭");
+      cancelAnimationFrame(frameId);
+      break;
     }
   }
-  const frameId = requestAnimationFrame(animate.bind(this, cells, player, ghosts, totalCoin));
 
   C.clearRect(0, 0, window.innerWidth, window.outerHeight);
 
@@ -42,6 +43,7 @@ function animate(cells: Cell[], player: Player, ghosts: Ghost[], totalCoin: numb
 
   drawMap(cells, player, ghosts);
   if (checkEnd(totalCoin, player)) {
+    alert("게임 승리 😃");
     cancelAnimationFrame(frameId);
   }
 }
@@ -78,9 +80,10 @@ function init() {
 
   const player = new Player({
     position: {
-      x: CELL.WIDTH + CELL.WIDTH / 2,
-      y: CELL.HEIGHT + CELL.HEIGHT / 2,
+      x: CELL.WIDTH,
+      y: CELL.HEIGHT,
     },
+    image: PLAYER.IMAGE,
   });
 
   const ghosts = [

@@ -1,5 +1,5 @@
 import Cell from "./cell";
-import { CELL, CellKey, CELL_IMAGES } from "./constant";
+import { CELL, CellKey, CELL_IMAGES, PLAYER } from "./constant";
 import Ghost from "./ghost";
 import Keys from "./key";
 import Player from "./player";
@@ -18,34 +18,36 @@ function isCollidingCell(cell: Cell, target: Player | Ghost) {
     tU = target.position.y + target.velocity.y;
     tD = target.position.y + target.height + target.velocity.y;
   } else {
-    tL = target.position.x - target.radius + target.velocity.x;
-    tR = target.position.x + target.radius + target.velocity.x;
-    tU = target.position.y - target.radius + target.velocity.y;
-    tD = target.position.y + target.radius + target.velocity.y;
+    tL = target.position.x + target.velocity.x;
+    tR = target.position.x + target.width + target.velocity.x;
+    tU = target.position.y + target.velocity.y;
+    tD = target.position.y + target.height + target.velocity.y;
   }
-  if (tL < cR && tU < cD && tR > cL + 1 && tD > cU + 1) return true;
+  if (tL < cR && tU < cD && tR > cL && tD > cU) {
+    return true;
+  }
   return false;
 }
 
 function isColliding(player: Player, ghost: Ghost) {
-  const pL = player.position.x - player.radius;
-  const pR = player.position.x + player.radius;
-  const pU = player.position.y - player.radius;
-  const pD = player.position.y + player.radius;
+  const pL = player.position.x;
+  const pR = player.position.x + player.width;
+  const pU = player.position.y;
+  const pD = player.position.y + player.height;
   const gL = ghost.position.x;
   const gR = ghost.position.x + ghost.width;
   const gU = ghost.position.y;
   const gD = ghost.position.y + ghost.height;
-  if (pL < gR && pU < gD && pR > gL + 1 && pD > gU + 1) return true;
+  if (pL < gR - 5 && pU < gD - 5 && pR > gL + 5 && pD > gU + 5) return true;
   return false;
 }
 
 function isTouching(cell: Cell, player: Player) {
-  const cx = cell.position.x + cell.width / 2;
-  const cy = cell.position.y + cell.height / 2;
-  const px = player.position.x;
-  const py = player.position.y;
-  if (Math.abs(px - cx) < player.radius / 2 && Math.abs(py - cy) < player.radius / 2) {
+  const cx = cell.position.x;
+  const cy = cell.position.y;
+  const px = player.position.x + player.velocity.x;
+  const py = player.position.y + player.velocity.y;
+  if (Math.abs(px - cx) < player.width / 2 && Math.abs(py - cy) < player.height / 2) {
     return true;
   }
   return false;

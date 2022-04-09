@@ -17,6 +17,7 @@ class Ghost {
   width: GhostProps["width"];
   height: GhostProps["height"];
   direction: GhostProps["direction"];
+  cycle: number;
 
   constructor(props: GhostProps) {
     const { position, image } = props;
@@ -26,6 +27,7 @@ class Ghost {
     this.height = GHOST.HEIGHT;
     this.image = image;
     this.direction = "stop";
+    this.cycle = 0;
   }
 
   setDirection(key: GhostProps["direction"]) {
@@ -49,7 +51,19 @@ class Ghost {
   }
 
   draw() {
-    C.drawImage(this.image, 0, 0, GHOST.IMAGE_SIZE, GHOST.IMAGE_SIZE, this.position.x, this.position.y, this.width, this.height);
+    C.drawImage(
+      this.image,
+      GHOST.IMAGE_SIZE * this.cycle,
+      0,
+      GHOST.IMAGE_SIZE,
+      GHOST.IMAGE_SIZE,
+      this.position.x,
+      this.position.y,
+      this.width,
+      this.height
+    );
+    if (this.cycle > 6) this.cycle = 0;
+    else this.cycle += 1;
   }
   move() {
     this.position.x += this.velocity.x;
