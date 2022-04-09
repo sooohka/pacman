@@ -13,7 +13,7 @@ import pipeConnectorBottom from "./assets/pipeConnectorBottom.png";
 import pipeConnectorLeft from "./assets/pipeConnectorLeft.png";
 import pipeConnectorRight from "./assets/pipeConnectorRight.png";
 import pipeConnectorTop from "./assets/pipeConnectorTop.png";
-import pipecross from "./assets/pipecross.png";
+import pipeCross from "./assets/pipeCross.png";
 import coin from "./assets/Coin.png";
 import redGhost from "./assets/redGhost.png";
 import yellowGhost from "./assets/yellowGhost.png";
@@ -73,7 +73,7 @@ const CELL_IMAGE_SRC = {
   t: pipeConnectorTop,
   l: pipeConnectorLeft,
   r: pipeConnectorRight,
-  c: pipecross,
+  c: pipeCross,
   "1": coin,
   "0": null as null,
 };
