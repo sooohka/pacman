@@ -1,7 +1,16 @@
 import C from "./canvas";
 import Cell from "./cell";
 import { CANVAS, CELL, GHOST_IMAGES } from "./constant";
-import { checkCells, checkEnd, checkGhostNextMove, checkPlayerNextMove, countCoins, drawMap, mapToCell } from "./gameUtil";
+import {
+  checkCells,
+  checkEnd,
+  checkGhostNextMove,
+  checkPlayerNextMove,
+  countCoins,
+  drawMap,
+  isColliding,
+  mapToCell,
+} from "./gameUtil";
 import Ghost from "./ghost";
 import Keys from "./key";
 import map from "./map";
@@ -9,6 +18,12 @@ import Player from "./player";
 import "./styles/style.css";
 
 function animate(cells: Cell[], player: Player, ghosts: Ghost[], totalCoin: number) {
+  for (const ghost of ghosts) {
+    if (isColliding(player, ghost)) {
+      alert("collides");
+      return;
+    }
+  }
   const frameId = requestAnimationFrame(animate.bind(this, cells, player, ghosts, totalCoin));
 
   C.clearRect(0, 0, window.innerWidth, window.outerHeight);

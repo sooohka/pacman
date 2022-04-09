@@ -4,9 +4,9 @@ import Ghost from "./ghost";
 import Keys from "./key";
 import Player from "./player";
 
-function isColliding(cell: Cell, target: Player | Ghost) {
-  const [bL, bR] = [cell.position.x, cell.position.x + cell.width];
-  const [bU, bD] = [cell.position.y, cell.position.y + cell.height];
+function isCollidingCell(cell: Cell, target: Player | Ghost) {
+  const [cL, cR] = [cell.position.x, cell.position.x + cell.width];
+  const [cU, cD] = [cell.position.y, cell.position.y + cell.height];
   let tL;
   let tR;
   let tU;
@@ -23,7 +23,20 @@ function isColliding(cell: Cell, target: Player | Ghost) {
     tU = target.position.y - target.radius + target.velocity.y;
     tD = target.position.y + target.radius + target.velocity.y;
   }
-  if (tL < bR - 1 && tU < bD - 1 && tR > bL + 1 && tD > bU + 1) return true;
+  if (tL < cR && tU < cD && tR > cL + 1 && tD > cU + 1) return true;
+  return false;
+}
+
+function isColliding(player: Player, ghost: Ghost) {
+  const pL = player.position.x - player.radius;
+  const pR = player.position.x + player.radius;
+  const pU = player.position.y - player.radius;
+  const pD = player.position.y + player.radius;
+  const gL = ghost.position.x;
+  const gR = ghost.position.x + ghost.width;
+  const gU = ghost.position.y;
+  const gD = ghost.position.y + ghost.height;
+  if (pL < gR && pU < gD && pR > gL + 1 && pD > gU + 1) return true;
   return false;
 }
 
@@ -52,7 +65,7 @@ function checkPlayerNextMove(player: Player, cells: Cell[]) {
   if (keys.getIsPressed("up")) newPlayer.setDirection("up");
   if (keys.getIsPressed("down")) newPlayer.setDirection("down");
   for (const cell of cells) {
-    if (cell.isBoundary && isColliding(cell, newPlayer)) {
+    if (cell.isBoundary && isCollidingCell(cell, newPlayer)) {
       player.setDirection(prevDirection);
       break;
     } else {
@@ -79,19 +92,19 @@ function checkGhostNextMove(ghosts: Ghost[], cells: Cell[]) {
     const collision: Dir[] = [];
     cells.forEach((cell) => {
       newGhost.setDirection("left");
-      if (cell.isBoundary && isColliding(cell, newGhost)) {
+      if (cell.isBoundary && isCollidingCell(cell, newGhost)) {
         collision.push(newGhost.direction);
       }
       newGhost.setDirection("right");
-      if (cell.isBoundary && isColliding(cell, newGhost)) {
+      if (cell.isBoundary && isCollidingCell(cell, newGhost)) {
         collision.push(newGhost.direction);
       }
       newGhost.setDirection("up");
-      if (cell.isBoundary && isColliding(cell, newGhost)) {
+      if (cell.isBoundary && isCollidingCell(cell, newGhost)) {
         collision.push(newGhost.direction);
       }
       newGhost.setDirection("down");
-      if (cell.isBoundary && isColliding(cell, newGhost)) {
+      if (cell.isBoundary && isCollidingCell(cell, newGhost)) {
         collision.push(newGhost.direction);
       }
     });
@@ -143,13 +156,13 @@ function countCoins(cells: Cell[]) {
 function checkCells(cells: Cell[], player: Player, ghosts: Ghost[]) {
   cells.forEach((c) => {
     ghosts.forEach((ghost) => {
-      if (c.isBoundary && isColliding(c, ghost)) {
+      if (c.isBoundary && isCollidingCell(c, ghost)) {
         // ghost.setVelocity({ x: 0, y: 0 });
         ghost.setDirection("stop");
       }
     });
 
-    if (c.isBoundary && isColliding(c, player)) {
+    if (c.isBoundary && isCollidingCell(c, player)) {
       // player.setVelocity({ x: 0, y: 0 });
       player.setDirection("stop");
     } else if (c.isCoin && isTouching(c, player)) {
@@ -173,4 +186,16 @@ function generateGhostNextMove() {
   return val[ran];
 }
 
-export { checkCells, generateGhostNextMove, countCoins, isTouching, checkPlayerNextMove, checkGhostNextMove, isColliding, mapToCell, drawMap, checkEnd };
+export {
+  isColliding,
+  checkCells,
+  generateGhostNextMove,
+  countCoins,
+  isTouching,
+  checkPlayerNextMove,
+  checkGhostNextMove,
+  isCollidingCell,
+  mapToCell,
+  drawMap,
+  checkEnd,
+};
