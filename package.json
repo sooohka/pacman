@@ -5,7 +5,8 @@
   "main": "index.ts",
   "scripts": {
     "start": "webpack serve",
-    "build": "webpack"
+    "build": "webpack",
+    "clean":"rm -rf dist"
   },
   "dependencies": {
     "@types/node": "^17.0.23",
