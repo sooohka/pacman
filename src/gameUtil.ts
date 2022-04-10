@@ -1,5 +1,5 @@
 import Cell from "./cell";
-import { CELL, CellKey, CELL_IMAGES, PLAYER } from "./constant";
+import { CELL, CellKey, CELL_IMAGES } from "./constant";
 import Ghost from "./ghost";
 import Keys from "./key";
 import Player from "./player";
@@ -30,15 +30,15 @@ function isCollidingCell(cell: Cell, target: Player | Ghost) {
 }
 
 function isColliding(player: Player, ghost: Ghost) {
-  const pL = player.position.x;
-  const pR = player.position.x + player.width;
-  const pU = player.position.y;
-  const pD = player.position.y + player.height;
+  const pL = player.position.x + player.velocity.x;
+  const pR = player.position.x + player.width + player.velocity.x;
+  const pU = player.position.y + player.velocity.y;
+  const pD = player.position.y + player.height + player.velocity.y;
   const gL = ghost.position.x;
   const gR = ghost.position.x + ghost.width;
   const gU = ghost.position.y;
   const gD = ghost.position.y + ghost.height;
-  if (pL < gR - 5 && pU < gD - 5 && pR > gL + 5 && pD > gU + 5) return true;
+  if (pL < gR && pU < gD && pR > gL && pD > gU) return true;
   return false;
 }
 
@@ -176,7 +176,6 @@ function checkCells(cells: Cell[], player: Player, ghosts: Ghost[]) {
 
 function checkEnd(totalCoin: number, player: Player) {
   if (player.point >= totalCoin) {
-    alert("win");
     return true;
   }
   return false;

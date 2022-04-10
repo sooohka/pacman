@@ -46,7 +46,7 @@ const GHOST = {
   WIDTH: 40,
   HEIGHT: 40,
   IMAGE_SIZE: 16,
-  SPEED: 3,
+  SPEED: 2,
 };
 
 const GHOST_IMAGE_SRC = {
@@ -127,7 +127,7 @@ const CELL_IMAGES: typeof CELL_IMAGE_SRC = {
 const PLAYER = {
   WIDTH: 40,
   HEIGHT: 40,
-  SPEED: 5,
+  SPEED: 4,
   IMAGE_SIZE: 16,
   IMAGE: createPlayerImage(),
 };
