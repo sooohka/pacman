@@ -28,4 +28,4 @@ jobs:
         run: aws s3 rm  ${{secrets.AWS_S3_BUCKET}} --recursive
 
       - name: Upload
-        run: aws s3 cp dist ${{secrets.AWS_S3_BUCKET}} --recursive;
+        run: aws s3 cp dist ${{secrets.AWS_S3_BUCKET}} --recursive --cache-control max-age=0

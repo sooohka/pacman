@@ -30,15 +30,11 @@ function isCollidingCell(cell: Cell, target: Player | Ghost) {
 }
 
 function isColliding(player: Player, ghost: Ghost) {
-  const pL = player.position.x + player.velocity.x;
-  const pR = player.position.x + player.width + player.velocity.x;
-  const pU = player.position.y + player.velocity.y;
-  const pD = player.position.y + player.height + player.velocity.y;
-  const gL = ghost.position.x;
-  const gR = ghost.position.x + ghost.width;
-  const gU = ghost.position.y;
-  const gD = ghost.position.y + ghost.height;
-  if (pL < gR && pU < gD && pR > gL && pD > gU) return true;
+  const pX = player.position.x + player.width / 2;
+  const pY = player.position.y + player.height / 2;
+  const gX = ghost.position.x + ghost.width / 2;
+  const gY = ghost.position.y + ghost.height / 2;
+  if (Math.abs(pX - gX) < player.width / 2 && Math.abs(pY - gY) < player.height / 2) return true;
   return false;
 }
 
